@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `Client` (
 	first_name NVARCHAR(50) NOT NULL,
 	last_name NVARCHAR(50) NOT NULL,
     email NVARCHAR(320) NOT NULL,
-    manager_id INT NOT NULL,
     PRIMARY KEY (client_id)
 );
 
