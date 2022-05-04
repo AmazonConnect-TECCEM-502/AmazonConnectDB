@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `Client` (
 	last_name NVARCHAR(50) NOT NULL,
     email NVARCHAR(320) NOT NULL,
     manager_id INT NOT NULL,
+    phone NVARCHAR(50) NOT NULL,
     PRIMARY KEY (client_id)
 );
 
