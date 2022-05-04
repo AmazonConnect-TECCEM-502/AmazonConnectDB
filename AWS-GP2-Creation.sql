@@ -1,34 +1,24 @@
+-- DROP DATABASE `capstone`;
 CREATE DATABASE IF NOT EXISTS `capstone`;
 USE capstone;
 
--- Manager table
-/*
-Constraints:
-- Primary key: manager_id
-*/
-CREATE TABLE IF NOT EXISTS `Manager` (
-	manager_id INT NOT NULL AUTO_INCREMENT,
-	first_name NVARCHAR(50) NOT NULL,
-	last_name NVARCHAR(50) NOT NULL,
-    email NVARCHAR(320) NOT NULL,
-    PRIMARY KEY (manager_id)
-);
-
--- Agent table
+-- User table
 /*
 Constraints:
 - Primary key: agent_id
-Relationships:
-- One agent should have ONLY ONE manager
+- Check: user_type IN ('agent','manager','admin')
 */
-CREATE TABLE IF NOT EXISTS `Agent` (
-	agent_id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `User` (
+	user_id INT NOT NULL AUTO_INCREMENT,
 	first_name NVARCHAR(50) NOT NULL,
 	last_name NVARCHAR(50) NOT NULL,
     email NVARCHAR(320) NOT NULL,
-    manager_id INT NOT NULL,
-    PRIMARY KEY (agent_id),
-    FOREIGN KEY (manager_id) REFERENCES Manager(manager_id) ON UPDATE CASCADE ON DELETE CASCADE
+    user_type NVARCHAR(20) NOT NULL,
+    cognito_uuid NVARCHAR(255) NOT NULL,
+    manager_id  INT,
+    PRIMARY KEY (user_id),
+    CHECK (LOWER(user_type) IN ('agent','manager','admin')),
+    FOREIGN KEY (manager_id) REFERENCES User(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Client table
@@ -41,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `Client` (
 	first_name NVARCHAR(50) NOT NULL,
 	last_name NVARCHAR(50) NOT NULL,
     email NVARCHAR(320) NOT NULL,
+    manager_id INT NOT NULL,
     PRIMARY KEY (client_id)
 );
 
@@ -66,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `Call` (
     video_url TEXT,
     transcription_url TEXT,
     PRIMARY KEY (call_id),
-    FOREIGN KEY (agent_id) REFERENCES Agent(agent_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (agent_id) REFERENCES User(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES Client(client_id) ON UPDATE CASCADE ON DELETE CASCADE,
     CHECK(rating BETWEEN 0 AND 5),
     CHECK(duration > 0)
@@ -85,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `Problem` (
     submitted_by INT NOT NULL,
     created DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (problem_id),
-    FOREIGN KEY (submitted_by) REFERENCES Agent(agent_id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (submitted_by) REFERENCES `User`(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Call-Problem (join) table
@@ -126,9 +117,9 @@ CREATE TABLE IF NOT EXISTS `Solution` (
     approved BIT DEFAULT 0,
     approved_by INT,
     PRIMARY KEY (solution_id),
-    FOREIGN KEY (submitted_by) REFERENCES Agent(agent_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (submitted_by) REFERENCES `User`(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (problem_id) REFERENCES Problem(problem_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (approved_by) REFERENCES Manager(manager_id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (approved_by) REFERENCES User(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Problem_category table
