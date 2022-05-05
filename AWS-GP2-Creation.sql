@@ -31,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `Client` (
 	first_name NVARCHAR(50) NOT NULL,
 	last_name NVARCHAR(50) NOT NULL,
     email NVARCHAR(320) NOT NULL,
-    manager_id INT NOT NULL,
     phone NVARCHAR(50) NOT NULL,
     PRIMARY KEY (client_id)
 );
@@ -165,7 +164,6 @@ CREATE TABLE IF NOT EXISTS `Product` (
 	product_id INT NOT NULL AUTO_INCREMENT,
     product_name NVARCHAR(50) NOT NULL,
     product_description TEXT,
-    category INT NOT NULL,
     price FLOAT DEFAULT 0,
     stock INT DEFAULT 0,
     PRIMARY KEY (product_id)
