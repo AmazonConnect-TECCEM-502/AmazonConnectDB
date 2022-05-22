@@ -10,11 +10,11 @@ import string
 import datetime
 
 
-# In[2]:
+# In[4]:
 
 
 #User
-delimiter = ","
+delimiter = ";"
 N = 50
 
 def randEmail(): 
@@ -28,17 +28,27 @@ def generateUsers():
     mid_max = 5
     fnames = ['Eric','Joan','Vol','Ferro','Javier','Omar','Renata','Fernanda','Roberto','Emilio']
     lnames = ['Cruz','Guerrero','Sanchez','Ferro','Sorchini','Moreno','Valdez','Barragan','Luna','Rivers']
-    user_type = ['agent','manager','admin']
+    user_type = ['agent','admin']
     
     with open('users.csv', 'w') as f:
         f.write(delimiter.join(colnames)+"\n")
-        for i in range(N):
+        for i in range(mid_max):
+            entry = str(i) + delimiter
+            entry += random.choice(fnames) + delimiter
+            entry += random.choice(lnames) + delimiter
+            entry += randEmail() + delimiter
+            entry += 'manager' + delimiter
+            entry += str(i) + delimiter
+            entry += str(uuid.uuid4()) + "\n"
+            f.write(entry)
+        
+        for i in range(mid_max, N):
             entry = str(i) + delimiter
             entry += random.choice(fnames) + delimiter
             entry += random.choice(lnames) + delimiter
             entry += randEmail() + delimiter
             entry += random.choice(user_type) + delimiter
-            entry += str(random.randint(0,mid_max)) + delimiter
+            entry += str(random.randint(0, mid_max)) + delimiter
             entry += str(uuid.uuid4()) + "\n"
             f.write(entry)
 
@@ -134,7 +144,7 @@ def generateProblemCategories():
 generateProblemCategories()
 
 
-# In[6]:
+# In[1]:
 
 
 #Solution
@@ -162,5 +172,55 @@ def generateSolutions():
             f.write(entry)
 
     
+generateSolutions()
+
+
+# In[6]:
+
+
+#call-problem
+delimiter = ","
+N = 50
+    
+def generateSolutions():
+    tableName = 'call-problem'
+    colnames = ['call_problem','call_id','problem_id']
+    uid_max = 50
+    cid_max = 50
+    pid_max = 50
+    
+    with open('call_problem.csv', 'w') as f:
+        f.write(delimiter.join(colnames)+"\n")
+        for i in range(N):
+            entry = str(i) + delimiter
+            entry += str(random.randint(0,cid_max)) + delimiter
+            entry += str(random.randint(0,pid_max)) + '\n'
+            f.write(entry)
+            
+generateSolutions()
+
+
+# In[7]:
+
+
+delimiter = ","
+N = 50
+#category_problem
+def generateSolutions():
+    tableName = 'call-problem'
+    colnames = ['category_problem','category_id','problem_id']
+    uid_max = 50
+    cid_max = 7
+    pid_max = 50
+    
+    with open('category_problem.csv', 'w') as f:
+        f.write(delimiter.join(colnames)+"\n")
+        for i in range(N):
+            entry = str(i) + delimiter
+            entry += str(random.randint(1,cid_max)) + delimiter
+            entry += str(random.randint(0,pid_max)) + '\n'
+            f.write(entry)
+            
+            
 generateSolutions()
 
