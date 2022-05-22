@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS `Solution` (
     submitted_by INT NOT NULL,
     approved DATETIME DEFAULT NULL,
     approved_by INT,
+    created DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (solution_id),
     FOREIGN KEY (submitted_by) REFERENCES `User`(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (problem_id) REFERENCES Problem(problem_id) ON UPDATE CASCADE ON DELETE CASCADE,
